@@ -26,6 +26,8 @@ func qsort_naive(array []int) {
 	}
 
 	// wait, I don't even know how this works
+	// don't know where the pivot is going to end up in the list
+	// I guess that's what bentley's sort is so cool being in-place
 }
 
 
@@ -34,7 +36,7 @@ func qsort_bentley(array []int) {
 }
 
 func _qsort_bentley(array []int, l int, r int) {
-	pivot := array[l]
+	pivot := &array[l]
 
 	if l >= r {
 		return
@@ -42,14 +44,21 @@ func _qsort_bentley(array []int, l int, r int) {
 
 	m := l // choose an element to be pivot
 	for i := l+1; i <= r ; i++ {
-	//	element := array[i]
-		if array[i] < pivot { /// although it should be possible to use "element" in place of ref
+/*
+		if array[i] < pivot {
 			m++
 			array[i], array[m] = array[m], array[i]
 		}
+*/
+// try out some pointer arithmetic
+		element := &array[i]
+		if *element < *pivot {
+			m++
+			*element, array[m] = array[m], *element
+		}
 	}
 
-	array[m], array[l] = array[l], array[m]
+	array[m], *pivot = *pivot, array[m]
 
 	fmt.Printf("Current: %v\n", array)
 
